@@ -27,7 +27,7 @@ describe('Authentication for socket', function(done) {
   });
 
   afterEach(function(done) {
-    User.remove(validUser);
+    User.find(validUser).remove().exec();
     done();
   });
 
