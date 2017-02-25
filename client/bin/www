@@ -1,4 +1,11 @@
 #!/usr/bin/env node
 
-var app = require('./../app');
-app('http://localhost:3000');
+var configTest = {
+    name: 'donkey',
+    script: "var data = {monkey: 'donkey'}; data",
+    interval: 5000
+};
+
+var socket = require('./../socket');
+socket.connect('http://localhost:3000')
+socket.addMonitor(configTest);
