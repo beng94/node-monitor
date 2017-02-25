@@ -1,8 +1,8 @@
 var request = require('supertest');
 var expect = require('chai').expect;
 var mongoose = require('mongoose');
-var app = require('./../../app');
-var User = require('./../../model/user');
+var app = require('./../app');
+var User = require('./../model/user');
 
 describe('Authentication for socket', function(done) {
   var validUser = {
