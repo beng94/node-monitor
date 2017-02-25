@@ -97,4 +97,21 @@ describe('Socket', function(done) {
             }, 1500);
         })
     });
+
+    it('Cant send data before authentication', function(done) {
+
+        var disconnected = false;
+        ios.on('connect', function() {
+            ios.emit('data', {donkey: 'monkey'});
+        });
+
+        ios.on('disconnect', function() {
+            disconnected = true;
+        });
+
+        setTimeout(function() {
+            expect(disconnected).to.be.true;
+            done();
+        }, 200);
+    });
 });
