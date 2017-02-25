@@ -1,6 +1,5 @@
 var request = require('supertest');
 var expect = require('chai').expect;
-var mongoose = require('mongoose');
 var app = require('./../app');
 var User = require('./../model/user');
 
@@ -18,11 +17,6 @@ describe('Authentication for socket', function(done) {
 
   beforeEach(function(done) {
     new User(validUser).save();
-    done();
-  });
-
-  after(function(done) {
-    mongoose.connection.close();
     done();
   });
 

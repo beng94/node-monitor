@@ -4,21 +4,26 @@ var should = chai.should();
 var expect = chai.expect;
 var io = require('socket.io-client');
 var app = require('./../app');
+var Client = require('./../model/client');
 
 chai.use(spies);
 
 
 describe('Socket', function(done) {
     var ios;
+    var client;
 
     before(function(done) {
-        app.listen(3000, function() {
-            done();
-        });
+        app.listen(3000);
+
+        client = new Client({name: 'Test client'});
+        client.save();
+        done();
     });
 
     after(function(done) {
         app.close();
+        Client.find(client).remove().exec();
         done();
     });
 
@@ -57,7 +62,7 @@ describe('Socket', function(done) {
         var connected = false;
         ios.on('connect', function(data) {
             connected = true;
-            ios.emit('authenticate', {});
+            ios.emit('authenticate', client.api_key);
 
             ios.on('disconnect', function() {
                 connected = false;
@@ -77,7 +82,7 @@ describe('Socket', function(done) {
         var bobConnected = false;
         bob.on('connect', function() {
             bobConnected = true;
-            bob.emit('authenticate', {});
+            bob.emit('authenticate', client.api_key);
             bob.on('disconnect', function() {
                 bobConnected = false;
             })
