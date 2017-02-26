@@ -1,4 +1,5 @@
 var Client = require('./model/client');
+var Data = require('./model/data');
 
 module.exports = function(io) {
 
@@ -20,6 +21,7 @@ module.exports = function(io) {
                     //console.log('auth success: %s', doc.name);
                     socket.auth = true;
                     socket.name = doc.name;
+                    socket.id = doc._id;
                 } else {
                     //console.log('auth failed: invalid token');
                 }
@@ -28,7 +30,12 @@ module.exports = function(io) {
 
         socket.on('data', function(data) {
             if(check_auth()) {
-                // Process data
+                //console.log('data received %j', data);
+                var data = new Data({
+                    clientId: socket.id,
+                    data: data
+                });
+                data.save();
             }
         });
 

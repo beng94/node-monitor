@@ -5,6 +5,8 @@ var expect = chai.expect;
 var io = require('socket.io-client');
 var app = require('./../app');
 var Client = require('./../model/client');
+var randToken = require('rand-token');
+var Data = require('./../model/data');
 
 chai.use(spies);
 
@@ -118,5 +120,21 @@ describe('Socket', function(done) {
             expect(disconnected).to.be.true;
             done();
         }, 200);
+    });
+
+    it('Saves data on \'data\' events', function(done) {
+        ios.on('connect', function() {
+            ios.emit('authenticate', client.api_key);
+            var testKey = randToken.generate(64);
+            ios.emit('data', {key: testKey});
+
+            setTimeout(function() {
+                Data.findOne({data: {key: testKey}}, function(err, doc) {
+                    if(doc) {
+                        done();
+                    }
+                })
+            }, 300);
+        });
     });
 });
