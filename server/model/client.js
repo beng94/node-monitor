@@ -2,7 +2,10 @@ var mongoose = require('mongoose');
 var randToken = require('rand-token');
 
 var ClientSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true
+    },
     api_key: {
         type: String,
         default: function() {
