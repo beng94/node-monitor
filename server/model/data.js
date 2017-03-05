@@ -1,7 +1,10 @@
 var mongoose = require('mongoose');
 
 var DataSchema = new mongoose.Schema({
-    clientId: String,
+    clientId: {
+        type: String,
+        required: true
+    },
     data: Object
 });
 
