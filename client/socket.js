@@ -19,12 +19,13 @@ function registerMonitor(config) {
     }, config.interval);
 }
 
-function connect (server) {
+function connect (server, apiKey) {
     socket = io(server);
 
     socket.on('connect', function(){
         //console.log('connected');
         socket.emit('authenticate', {});
+        socket.emit('authenticate', apiKey);
     });
 
     socket.on('disconnect', function() {
