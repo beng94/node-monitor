@@ -7,7 +7,9 @@ import {DataService} from './data.service'
         <h2>Data tag</h2>
         <ul>
             <li *ngFor='#data of datas'>
-                {{data}}
+                {{data._id}}
+                {{data.clientId}}
+                {{JSON.stringify(data.data)}}
             </li>
         </ul>
         `,
@@ -15,8 +17,13 @@ import {DataService} from './data.service'
 })
 export class DataComponent {
     datas;
+    JSON;
 
     constructor(dataService: DataService) {
-        this.datas = dataService.getDatas();
+        this.JSON = JSON;
+        dataService.getDatas()
+            .subscribe(
+                datas => this.datas = datas
+        )
     }
 }
