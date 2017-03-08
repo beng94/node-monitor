@@ -4,7 +4,7 @@ var router = express.Router();
 var Data = require('./../model/data');
 
 router.route('/')
-    .get(function(request, response) {
+    .post(function(request, response) {
         var clientId = request.body.clientId;
 
         if(!clientId) {

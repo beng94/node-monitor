@@ -31,21 +31,21 @@ describe('REST for client', function(done) {
 
         it('returns 200 for valid', function(done) {
             request(app)
-                .get('/data')
+                .post('/data')
                 .send({clientId: client._id})
                 .expect(200, done);
         });
 
         it('returns 400 for invalid params', function(done) {
             request(app)
-                .get('/data')
+                .post('/data')
                 .send({})
                 .expect(400, done);
         });
 
         it('returns every data', function(done) {
             request(app)
-                .get('/data')
+                .post('/data')
                 .send({clientId: client._id})
                 .end(function(err, res) {
                     var d = JSON.parse(res.text);
