@@ -2,12 +2,15 @@ var express = require('express');
 var router = express.Router();
 
 var Data = require('./../model/data');
+var emitter = require('./../data-emitter');
 
 router.route('/')
     .post(function(request, response) {
+        console.log("POST data");
         var clientId = request.body.clientId;
 
         if(!clientId) {
+            console.log("Invalid params");
             response.status(400).json('Invalid params');
             return;
         }
@@ -18,7 +21,13 @@ router.route('/')
                 response.status(400).json('Invalid client');
             }
 
-            response.json(doc);
+            var socketId = emitter.registerRestSocket(clientId);
+            var resp = {
+                datas: doc,
+                socket: socketId
+            };
+
+            response.json(resp);
         });
     });
 

@@ -4,3 +4,8 @@ var app = require('./../app');
 app.listen(3000, function() {
   console.log('Listening on port 3000');
 });
+
+var restSocket = require('./../rest-socket');
+restSocket.http.listen(3001, function() {
+    console.log('Rest socket listening on port 3001');
+});
