@@ -21,8 +21,14 @@
           app: {
             format: 'register',
             defaultExtension: 'js'
-          }
-        }
+          },
+        
+      "socket.io-client": {"defaultExtension": "js"}
+  },
+
+  map: {
+    "socket.io-client": "node_modules/socket.io-client/dist/socket.io.js"
+  }
       });
       System.import('app/boot')
             .then(null, console.error.bind(console));

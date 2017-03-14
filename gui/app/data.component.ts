@@ -23,7 +23,18 @@ export class DataComponent {
         this.JSON = JSON;
         dataService.getDatas()
             .subscribe(
-                datas => this.datas = datas
-        )
+            datas => {
+                this.datas = datas.datas;
+                let socketTag = datas.socket;
+                dataService.watchSocket(socketTag).subscribe(
+                data => {
+                    console.log('Socket data received: ', data);
+                    var payload = {
+                        data: data
+                        };
+                    this.datas.push(payload);
+                });
+            }
+        );
     }
 }
