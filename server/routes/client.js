@@ -5,10 +5,18 @@ var Client = require('./../model/client');
 
 router.route('/')
     .get(function(request, response) {
+        console.log('GET client');
         var clientId = request.body.clientId;
 
         if(!clientId) {
-            response.status(400).json('Invalid params');
+            Client.find({}, function(err, doc) {
+                if(err) {
+                    console.log(err);
+                    response.status(500).json('Internal db error');
+                    return;
+                }
+                response.json(doc);
+            });
             return;
         }
 

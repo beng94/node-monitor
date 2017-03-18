@@ -36,11 +36,10 @@ describe('REST for client', function(done) {
                 .expect(404, done);
         });
 
-        it('returns 400 for invalid body', function(done) {
+        it('returns 200 for empty body', function(done) {
             request(app)
                 .get('/client')
-                .send(invalidClient)
-                .expect(400, done)
+                .expect(200, done)
         });
 
     });
