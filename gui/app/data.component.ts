@@ -1,5 +1,6 @@
-import {Component} from 'angular2/core'
-import {DataService} from './data.service'
+import {Component} from 'angular2/core';
+import {DataService} from './data.service';
+import { RouteParams} from 'angular2/router';
 
 @Component({
     selector: 'data',
@@ -19,9 +20,9 @@ export class DataComponent {
     datas;
     JSON;
 
-    constructor(dataService: DataService) {
+    constructor(private route: RouteParams, dataService: DataService) {
         this.JSON = JSON;
-        dataService.getDatas()
+        dataService.getDatas(this.route.get('id'))
             .subscribe(
             datas => {
                 this.datas = datas.datas;

@@ -9,7 +9,7 @@ import { ClientService } from './client.service'
             <li *ngFor='#client of clients'>
                 {{ client.name }}
                 {{ client.api_key }}
-                <a [routerLink]="['/Data']">Details</a>
+                <a [routerLink]="['/Data', {id: client._id}]">Details</a>
             </li>
         </ul>
         `,
