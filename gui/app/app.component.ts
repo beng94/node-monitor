@@ -10,7 +10,7 @@ import { ClientComponent } from './client.component';
     directives: [DataComponent, ROUTER_DIRECTIVES]
 })
 @RouteConfig([
-    { path: '/data', component: DataComponent },
+    { path: '/data', component: DataComponent, name: 'Data' },
     { path: '/client', component: ClientComponent }
 ])
 export class AppComponent { }
