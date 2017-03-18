@@ -26,6 +26,11 @@ function connect (server, apiKey) {
         //console.log('connected');
         socket.emit('authenticate', {});
         socket.emit('authenticate', apiKey);
+
+        socket.on('config', function(config) {
+            console.log('Config update request received');
+            updateConfig(config);
+        });
     });
 
     socket.on('disconnect', function() {
@@ -42,6 +47,22 @@ function addMonitor(config) {
 function removeMonitor(name) {
     var monitorId = monitors[name].monitorId;
     clearInterval(monitorId);
+};
+
+function removeEveryMonitor() {
+    for(var name in monitors) {
+        removeMonitor(name);
+    }
+};
+
+function updateConfig(config) {
+    removeEveryMonitor();
+
+    for(var i = 0; i < config.length; i++) {
+        var conf = config[i];
+        console.log('New config: ', conf.name);
+        addMonitor(conf);
+    }
 };
 
 function close() {
