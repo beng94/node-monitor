@@ -10,9 +10,13 @@ var ClientSchema = new mongoose.Schema({
         type: String,
         default: function() {
             return randToken.generate(64);
-        }
-    }
-    // TODO: Config
+        },
+    },
+    config: [{
+        name: { type: String, require: true },
+        script: { type: String, required: true },
+        interval: { type: Number, rquired: true }
+    }]
 });
 
 // TODO: Can we simplify this?
