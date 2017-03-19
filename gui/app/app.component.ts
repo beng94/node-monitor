@@ -1,8 +1,9 @@
-import {Component} from 'angular2/core';
-import {DataComponent} from './data.component';
-import {RouteConfig,  ROUTER_DIRECTIVES} from 'angular2/router';
+import { Component } from 'angular2/core';
+import { RouteConfig,  ROUTER_DIRECTIVES } from 'angular2/router';
 
 import { ClientComponent } from './client.component';
+import { DataComponent } from './data.component';
+import { ConfigComponent } from './config.componnt';
 
 @Component({
     selector: 'my-app',
@@ -11,6 +12,7 @@ import { ClientComponent } from './client.component';
 })
 @RouteConfig([
     { path: '/data/:id', component: DataComponent, name: 'Data'},
-    { path: '/client', component: ClientComponent }
+    { path: '/client', component: ClientComponent },
+    { path: '/config/:id', component: ConfigComponent, name: 'Config' }
 ])
 export class AppComponent { }

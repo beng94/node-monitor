@@ -10,6 +10,7 @@ import { ClientService } from './client.service'
                 {{ client.name }}
                 {{ client.api_key }}
                 <a [routerLink]="['/Data', {id: client._id}]">Details</a>
+                <a [routerLink]="['/Config', {id: client._id}]">Config</a>
             </li>
         </ul>
         `,
