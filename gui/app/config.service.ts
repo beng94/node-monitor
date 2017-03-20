@@ -18,4 +18,15 @@ export class ConfigService {
                 .map((res: Response) => res.json())
                 .catch((error: any) => Observable.throw(error.json() || 'Server error'));
     }
+
+    postConfigs(id, configs) : Observable<Object> {
+        let url = 'http://localhost:3000/config/' + id;
+        let headers = new Headers({ 'Content-type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        let body = JSON.stringify(configs);
+
+        return this.http.post(url, body, options)
+                .map((res: Response) => res.json())
+                .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+    }
 }
