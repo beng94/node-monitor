@@ -12,7 +12,7 @@ import { ConfigComponent } from './config.componnt';
 })
 @RouteConfig([
     { path: '/data/:id', component: DataComponent, name: 'Data'},
-    { path: '/client', component: ClientComponent },
+    { path: '/client', component: ClientComponent, useAsDefault: true },
     { path: '/config/:id', component: ConfigComponent, name: 'Config' }
 ])
 export class AppComponent { }
