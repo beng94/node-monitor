@@ -53,6 +53,38 @@ router.route('/:clientId')
                 response.status(200).json('Updated');
             });
         });
+    })
+    .delete(function(request, response) {
+        console.log("DELETE config");
+        var configId = request.params.clientId;
+
+        if(!configId) {
+            console.log("Invalid params");
+            response.status(400).json('Invalid params');
+            return;
+        }
+
+        Client.update(
+            {},
+            { $pull: { config: { _id: configId } } },
+            { multi: true }
+        , function(err, result) {
+            if(err) {
+                console.error(err);
+                response.status(500).json('Internal db error');
+                return;
+            } else {
+                /* Success */
+                if(result.nModified) {
+                    console.log('Config ' + configId + ' deleted');
+                    response.status(200).json('Deleted');
+                } else {
+                    /* Failed to delete */
+                    console.log('Config ' + configId + ' not found');
+                    response.status(410).json('Config id ' + configId + ' not found');
+                }
+            }
+        });
     });
 
 module.exports = router;
