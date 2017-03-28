@@ -53,15 +53,17 @@ export class DataComponent {
                     var payload = datas.payload[i].data;
                     this.datas.push(payload);
                 }
+                this.datas.sort(function(a, b) {
+                    if(a.time < b.time) return 1;
+                    if(a.time > b.time) return -1;
+                    return 0;
+                });
 
                 let socketTag = datas.socket;
                 dataService.watchSocket(socketTag).subscribe(
-                data => {
-                    console.log('Socket data received: ', data);
-                    var payload = {
-                        data: data
-                        };
-                    this.datas.push(payload);
+                datas => {
+                    var payload = datas.data;
+                    this.datas.unshift(payload);
                 });
             }
         );

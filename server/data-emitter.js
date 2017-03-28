@@ -12,8 +12,11 @@ class DataEmitter extends EventEmitter {
     registerRestSocket(clientId) {
         var tag = randToken.generate(64);
         this.on(clientId, function(data) {
-            console.log('emitting data' + tag + " " + data);
-            restSocket.io.emit(tag, data);
+            console.log('emitting data' + tag + " " + JSON.stringify(data));
+            var paylog = {
+                data: data
+            };
+            restSocket.io.emit(tag, paylog);
         });
 
         return tag;
