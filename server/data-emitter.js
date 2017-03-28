@@ -5,8 +5,11 @@ var restSocket = require('./rest-socket');
 var randToken = require('rand-token');
 
 class DataEmitter extends EventEmitter {
+
     constructor() {
         super();
+
+        this.clientSockets = {};
     }
 
     registerRestSocket(clientId) {
@@ -20,6 +23,17 @@ class DataEmitter extends EventEmitter {
         });
 
         return tag;
+    }
+
+    registerClientSocket(clientId, socket) {
+        this.clientSockets.clientId = socket;
+    }
+
+    notifyClientSocket(clientId, topic, data) {
+        var socket = this.clientSockets.clientId;
+        if(socket) {
+            socket.emit(topic, data);
+        }
     }
 }
 

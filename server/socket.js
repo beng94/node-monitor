@@ -24,6 +24,8 @@ module.exports = function(io) {
                     socket.name = doc.name;
                     socket.id = doc._id;
 
+                    DataEmitter.registerClientSocket(socket.id, socket);
+
                     socket.emit('config', doc.config);
                 } else {
                     console.log('auth failed: invalid token');

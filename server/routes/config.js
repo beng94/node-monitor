@@ -25,7 +25,7 @@ router.route('/:clientId')
         });
     })
     .post(function(request, response) {
-        console.log("POST data");
+        console.log("POST config");
         var clientId = request.params.clientId;
 
         if(!clientId) {
@@ -47,6 +47,8 @@ router.route('/:clientId')
                     response.status(500).json('Internal db error');
                     return;
                 }
+
+                emitter.notifyClientSocket(clientId, 'config', doc.config);
 
                 response.status(200).json('Updated');
             });
