@@ -5,14 +5,37 @@ import { RouteParams} from 'angular2/router';
 @Component({
     selector: 'data',
     template: `
+        <style>
+            thead th {
+              background-color: #006DCC;
+              color: white;
+            }
+
+            .nopadding {
+                padding: 0 !important;
+                margin: 30 !important;
+            }
+        </style>
+
         <h2>Data tag</h2>
-        <ul>
-            <li *ngFor='#data of datas'>
-                {{data._id}}
-                {{data.clientId}}
-                {{JSON.stringify(data.data)}}
-            </li>
-        </ul>
+                <div class="panel panel-primary nopadding">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Payload</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='#data of datas'>
+                                <td>{{ data.name }}</td>
+                                <td>{{ data.time }}</td>
+                                <td>{{ JSON.stringify(data.paylog) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+        </div>
         `,
     providers: [DataService]
 })
@@ -25,7 +48,12 @@ export class DataComponent {
         dataService.getDatas(this.route.get('id'))
             .subscribe(
             datas => {
-                this.datas = datas.datas;
+                this.datas = [];
+                for(var i = 0; i < datas.payload.length; i++) {
+                    var payload = datas.payload[i].data;
+                    this.datas.push(payload);
+                }
+
                 let socketTag = datas.socket;
                 dataService.watchSocket(socketTag).subscribe(
                 data => {
