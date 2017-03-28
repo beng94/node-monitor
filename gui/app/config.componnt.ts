@@ -20,6 +20,7 @@ import { FormsModule } from 'angular2/forms';
         </style>
 
         <h2>Configuration</h2>
+
         <div class="container">
             <div class="row">
                 <div class="panel panel-primary colg-lg-4 nopadding" *ngFor='#conf of configs'>
@@ -27,21 +28,37 @@ import { FormsModule } from 'angular2/forms';
                         <h4 class="panel-title">{{ conf.name }}</h4>
                     </div>
                     <div class="panel-body">
-                        <p>
-                            <label>Name</label>
-                            <br>
-                            <input type="text" [(ngModel)]="conf.name">
-                        </p>
-                        <p>
-                            <label>Interval</label>
-                            <br>
-                            <input type="number" [(ngModel)]="conf.interval">
-                        </p>
-                        <p>
-                            <label>Script</label>
-                            <br>
-                            <textarea [(ngModel)]="conf.script"></textarea>
-                        </p>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <br>
+                                <div class="input-group">
+                                    <input type="text" [(ngModel)]="conf.name"/>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="control-label">Interval</label>
+                                <br>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" [(ngModel)]="conf.interval"/>
+                                    <span class="input-group-addon">ms</span>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="control-label">Script</label>
+                                <br>
+                                <div class="input-group">
+                                    <textarea [(ngModel)]="conf.script"></textarea>
+                                </div>
+                            </div>
+                        </form>
+
                         <p>
                             <button class="btn btn-primary" (click)="onSave($event)">Save</button>
                         </p>
