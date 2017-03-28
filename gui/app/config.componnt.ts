@@ -17,9 +17,25 @@ import { FormsModule } from 'angular2/forms';
                 -moz-appearance: textfield;
             }
 
+            .btn-header {
+                background-color: #286090;
+            }
+
         </style>
 
-        <h2>Configuration</h2>
+
+        <div class="container">
+            <div class="row">
+                <div class="panel panel-primary colg-lg-4 nopadding">
+                    <div class="panel-heading">
+                        <h2>
+                            <span>Configuration</span>
+                            <button class="btn btn-primary btn-header pull-right" (click)="onNew($event)">Create new</button>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="container">
             <div class="row">
@@ -80,6 +96,15 @@ export class ConfigComponent {
             .subscribe(
             configs => this.configs = configs;
         );
+    }
+
+    onNew(event) {
+        var newConfig = {
+            name: "",
+            interval: 5000,
+            script: "'test return'"
+        };
+        this.configs.unshift(newConfig);
     }
 
     onSave(event) {
