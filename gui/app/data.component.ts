@@ -27,8 +27,8 @@ import { RouteParams} from 'angular2/router';
                                 <th>Payload</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr *ngFor='#data of datas'>
+                        <tbody *ngFor='#data of datas'>
+                            <tr [ngClass]="{info: data.new}" >
                                 <td>{{ data.name }}</td>
                                 <td>{{ data.time }}</td>
                                 <td>{{ JSON.stringify(data.paylog) }}</td>
@@ -43,6 +43,13 @@ export class DataComponent {
     datas;
     JSON;
 
+    setPayloadTimer(payload) {
+        payload.new = true;
+        setTimeout(function() {
+            payload.new = false;
+        }, 5000);
+    }
+
     constructor(private route: RouteParams, dataService: DataService) {
         this.JSON = JSON;
         dataService.getDatas(this.route.get('id'))
@@ -51,6 +58,7 @@ export class DataComponent {
                 this.datas = [];
                 for(var i = 0; i < datas.payload.length; i++) {
                     var payload = datas.payload[i].data;
+                    this.setPayloadTimer(payload);
                     this.datas.push(payload);
                 }
                 this.datas.sort(function(a, b) {
@@ -63,6 +71,7 @@ export class DataComponent {
                 dataService.watchSocket(socketTag).subscribe(
                 datas => {
                     var payload = datas.data;
+                    this.setPayloadTimer(payload);
                     this.datas.unshift(payload);
                 });
             }
