@@ -9,12 +9,17 @@ function registerMonitor(config) {
 
         try {
             var data = eval(config.script);
-            socket.emit('data', data);
-            //console.log('data sent: %j', data);
+            var payload = {
+                name: config.name,
+                time: new Date(),
+                paylog: data
+            };
+            socket.emit('data', payload);
+            console.log('data sent: %j', payload);
         } catch(err) {
-            //console.log('Could not execute monitor: %j', err);
+            console.log('Could not execute monitor: %s', err);
             removeMonitor(config.name);
-            //console.log('Removed monitor: %s', config.name);
+            console.log('Removed monitor: %s', config.name);
         }
     }, config.interval);
 }
