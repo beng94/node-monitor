@@ -28,6 +28,15 @@ export class ClientService {
         return this.http.post(url, body, options)
                 .map((res: Response) => res.json())
                 .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+    }
 
+    deleteClient(id) : Observable<Object> {
+        let url = 'http://localhost:3000/client';
+        let headers = new Headers({ 'Content-type': 'application/json' });
+        let body = JSON.stringify({ clientId: id });
+        let options = new RequestOptions({ headers: headers, body: body });
+
+        return this.http.delete(url, options)
+                .catch((error: any) => Observable.throw(JSON.stringify(error) || 'Server error'));
     }
 }

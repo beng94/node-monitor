@@ -18,6 +18,14 @@ import { ClientService } from './client.service'
         background-color: #286090;
     }
 
+    .red {
+        color: red;
+    }
+
+    .glyphicon {
+        font-size: 25px;
+    }
+
     </style>
 
     <div class="container">
@@ -59,7 +67,8 @@ import { ClientService } from './client.service'
         <div class="row">
             <div class="panel panel-default col-lg-4 nopadding" *ngFor='#client of clients'>
                 <div class="panel-heading">
-                    <h4 class="panel-title"> {{ client.name }} </h4>
+                        <span>{{client.name }}</span>
+                        <a id="{{ client._id }}" name="{{ client.name }}" (click)="onDelete($event)" class="glyphicon glyphicon-remove-sign pull-right red"></a>
                 </div>
                 <div class="panel-body">
                     <a class="btn btn-client btn-primary center" [routerLink]="['/Data', {id: client._id}]">Details</a>
@@ -102,6 +111,18 @@ export class ClientComponent {
         return -1;
     }
 
+    findClientIndex(client) {
+        for(var i = 0; i < this.clients.length; i++) {
+            var cli = this.clients[i];
+            if(client.name === cli.name &&
+               client._id === cli._id) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     onNew(event) {
         this.newClients.push({});
         console.log('New called');
@@ -132,5 +153,25 @@ export class ClientComponent {
         var index = this.findNewClientIndex(name);
 
         this.newClients.splice(index, 1);
+    }
+
+    onDelete(event) {
+        console.log("Delete called");
+
+        var target = event.target || evenet.srcElement || event.currentTarget;
+        var id = target.attributes.id.value;
+        var name = target.attributes.name.value;
+        var client = {
+            _id: id,
+            name: name
+        };
+        var index = this.findClientIndex(client);
+
+        this.clientService.deleteClient(id)
+        .subscribe(
+            response => {
+                this.clients.splice(index, 1);
+            }
+        );
     }
 }
