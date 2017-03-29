@@ -29,4 +29,13 @@ export class ConfigService {
                 .map((res: Response) => res.json())
                 .catch((error: any) => Observable.throw(error.json() || 'Server error'));
     }
+
+    deleteConfig(id) : Observable<Object> {
+        let url = 'http://localhost:3000/config/' + id;
+        let headers = new Headers({ 'Content-type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.delete(url, {}, options)
+                .catch((error: any) => Observable.throw(error.json() || 'Server error'));
+    }
 }

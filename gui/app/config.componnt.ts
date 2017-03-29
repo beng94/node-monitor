@@ -26,7 +26,7 @@ import { FormsModule } from 'angular2/forms';
 
         <div class="container">
             <div class="row">
-                <div class="panel panel-primary colg-lg-4 nopadding">
+                <div class="panel panel-primary nopadding">
                     <div class="panel-heading">
                         <h2>
                             <span>Configuration</span>
@@ -75,9 +75,8 @@ import { FormsModule } from 'angular2/forms';
                             </div>
                         </form>
 
-                        <p>
-                            <button class="btn btn-primary" (click)="onSave($event)">Save</button>
-                        </p>
+                        <button class="btn btn-primary" (click)="onSave($event)">Save</button>
+                        <button class="btn btn-danger" (click)="onDelete($event)" id="{{ conf._id}}" name="{{ conf.name }}">Delete</button>
                     </div>
                 </div>
             </div>
@@ -92,9 +91,16 @@ export class ConfigComponent {
 
     constructor(private route: RouteParams, private configService: ConfigService) {
         this.JSON = JSON;
+        this.refresh();
+    }
+
+    refresh() {
         this.configService.getConfigs(this.route.get('id'))
             .subscribe(
-            configs => this.configs = configs;
+            configs => {
+                console.log("refreshed");
+                this.configs = configs;
+            }
         );
     }
 
@@ -110,7 +116,46 @@ export class ConfigComponent {
     onSave(event) {
         this.configService.postConfigs(this.route.get('id'), this.configs)
         .subscribe(
-            response => console.log(response);
+            response => {
+                console.log(response);
+                this.refresh();
+            });
+    }
+
+    findConfig(config) : number {
+        for(var i = 0; i < this.configs.length; i++) {
+            var conf = this.configs[i];
+            if(conf.name === config.name &&
+               conf._id === config.name) {
+               return i;
+            }
+        }
+
+        return -1;
+    }
+
+    onDelete(event) {
+        var target = event.target || evenet.srcElement || event.currentTarget;
+        var conf = {
+            _id: target.attributes.id.value,
+            name: target.attributes.name.value
+        };
+
+        /* New config is being deleted */
+        if(!conf._id) {
+            var index = this.findConfig(conf);
+            this.configs.splice(index, 1);
+
+            return;
+        }
+
+        this.configService.deleteConfig(conf._id)
+        .subscribe(
+            response => {
+                console.log(response);
+                var index = this.findConfig(conf);
+                this.configs.splice(index, 1);
+            }
         );
     }
 }
