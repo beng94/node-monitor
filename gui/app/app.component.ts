@@ -7,7 +7,7 @@ import { ConfigComponent } from './config.componnt';
 
 @Component({
     selector: 'my-app',
-    template: '<h1>My First Angular 2 App</h1><router-outlet></router-outlet>',
+    template: '<router-outlet></router-outlet>',
     directives: [DataComponent, ROUTER_DIRECTIVES]
 })
 @RouteConfig([
