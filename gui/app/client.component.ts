@@ -26,6 +26,14 @@ import { ClientService } from './client.service'
         font-size: 25px;
     }
 
+    .api_key {
+        display:inline-block;
+        width: 350px;
+        white-space: nowrap;
+        overflow:hidden !important;
+        text-overflow: ellipsis;
+    }
+
     </style>
 
     <div class="container">
@@ -71,6 +79,7 @@ import { ClientService } from './client.service'
                         <a id="{{ client._id }}" name="{{ client.name }}" (click)="onDelete($event)" class="glyphicon glyphicon-remove-sign pull-right red"></a>
                 </div>
                 <div class="panel-body">
+                    <h5 class="api_key">Api key: {{client.api_key}}</h5>
                     <a class="btn btn-client btn-primary center" [routerLink]="['/Data', {id: client._id}]">Details</a>
                     <a class="btn btn-client btn-primary center" [routerLink]="['/Config', {id: client._id}]">Config</a>
                 </div>
