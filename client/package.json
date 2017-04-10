@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "./bin/www",
     "test": "mocha --recursive"
   },
   "author": "Tamás Bence Gedai",
