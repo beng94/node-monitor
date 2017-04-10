@@ -5,7 +5,7 @@ var configTest = {
     script: "var data = {monkey: 'donkey'}; data",
     interval: 5000
 };
-var apiKey = 'DVPbohBqtVJGHIptRlYlbBHxv0vwObZ2BYQb24bsnEDCAQSp3IRLIlVJ8SBS3icT';
+var apiKey = 'SHMd6CjiVHo7cYU2lxYSHun8iEJehEhIgnYarmlOhBmKIHyDlo3g4fgj90393TQ4';
 
 var socket = require('./../socket');
 socket.connect('http://localhost:3000', apiKey);
