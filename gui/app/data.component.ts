@@ -55,6 +55,14 @@ export class DataComponent implements OnInit {
 
     maxSamples = 10;
 
+    getRandomColor() {
+        const colors = ["red", "blue", "green", "yellow", "pink", "orange"];
+        const id = Math.floor(Math.random() * colors.length);
+        const color = colors[id];
+        console.log(color);
+        return color;
+    }
+
     refreshGraphData(data) {
         var paylog = data["paylog"];
         var name = data["name"];
@@ -64,15 +72,16 @@ export class DataComponent implements OnInit {
         if(Number(paylog)) {
             update = true;
             if(this.graphData[name] == undefined) {
-                this.graphData[name] = [];
+                this.graphData[name] = {};
+                this.graphData[name].data = [];
+                this.graphData[name].color = this.getRandomColor();
             }
-            console.log("new data");
-            this.graphData[name].push(paylog);
+            this.graphData[name].data.push(paylog);
             freshFields.push(name);
         }
 
         if(update) {
-            //this.addContinousGraphData(freshFields);
+        //this.addContinousGraphData(freshFields);
             this.drawGraph();
         }
     }
@@ -81,7 +90,7 @@ export class DataComponent implements OnInit {
         for(let field in this.graphData) {
             if(!freshFields.indexOf(field)) {
                 var stream = this.graphData[field];
-                stream.push(stream[stream.length-1]);
+                stream.data.push(stream[stream.length-1]);
                 if(stream.length > this.maxSamples) {
                     stream.shift();
                 }
@@ -126,11 +135,9 @@ export class DataComponent implements OnInit {
     vis = {};
 
     drawGraph() {
-        console.log("draw start");
         var y = d3.scale.linear().domain([0, 10]).range([0 + this.margin, this.h - this.margin]);
         var x = d3.scale.linear().domain([0, this.maxSamples]).range([0 + this.margin, this. w - this.margin]);
 
-        console.log("donkey");
         d3.select("svg").selectAll("g").remove();
         var line = d3.svg.line()
             .x(function(d,i) { return x(i); })
@@ -143,12 +150,15 @@ export class DataComponent implements OnInit {
         var g = this.vis.append("svg:g")
             .attr("transform", "translate(0, 200)");
 
-        g.append("svg:path")
-            .attr("d", line(this.graphData["Random number"]))
-            .attr("fill", "none")
-            .attr("stroke", "blue")
-            .transition()
-            .attr("transform", "translate(" + x(-1) + ")");
+        for(let topic in this.graphData) {
+            const stream = this.graphData[topic];
+            g.append("svg:path")
+                .attr("d", line(stream.data))
+                .attr("fill", "none")
+                .attr("stroke", stream.color)
+                .transition()
+                .attr("transform", "translate(" + x(-1) + ")");
+        }
 
         g.selectAll(".xLabel")
             .data(x.ticks(5))
@@ -186,6 +196,5 @@ export class DataComponent implements OnInit {
             .attr("x1", x(-0.3))
             .attr("y2", function(d) { return -1 * y(d); })
             .attr("x2", x(0))
-        console.log("draw end");
     }
 }
