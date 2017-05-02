@@ -80,29 +80,47 @@ export class DataComponent implements OnInit {
         );
     }
 
+    data = [3, 6, 2, 7, 5, 2, 1, 3, 8, 9, 2, 5, 7];
+    data2 = [2, 10, 3, 6, 3, 8, 3, 4, 1, 9, 9, 2, 1];
+    w = 400;
+    h = 200;
+    vis = {};
+
     ngOnInit() {
-        var data = [3, 6, 2, 7, 5, 2, 1, 3, 8, 9, 2, 5, 7],
-        w = 400,
-        h = 200,
-        margin = 20,
-        y = d3.scale.linear().domain([0, d3.max(data)]).range([0 + margin, h - margin]),
-        x = d3.scale.linear().domain([0, data.length]).range([0 + margin, w - margin])
+        setInterval(() => this.drawGraph(), 1000);
+        setInterval(() => {
+            var id = Math.floor((Math.random() * this.data.length));
+            var num = Math.floor((Math.random() * 50);
+            this.data[id] = num;
+        }, 500);
+    }
 
-        var vis = d3.select("svg")
-            .attr("width", w)
-            .attr("height", h);
+    drawGraph() {
+        var margin = 20,
+        y = d3.scale.linear().domain([0, d3.max(this.data)]).range([0 + margin, this.h - margin]),
+        x = d3.scale.linear().domain([0, this.data.length]).range([0 + margin, this. w - margin])
 
-        var g = vis.append("svg:g")
-            .attr("transform", "translate(0, 200)");
-
+        d3.select("svg").selectAll("g").remove();
         var line = d3.svg.line()
             .x(function(d,i) { return x(i); })
             .y(function(d) { return -1 * y(d); })
 
+        this.vis = d3.select("svg")
+            .attr("width", this.w)
+            .attr("height", this.h);
+
+        var g = this.vis.append("svg:g")
+            .attr("transform", "translate(0, 200)");
+
         g.append("svg:path")
-            .attr("d", line(data))
+            .attr("d", line(this.data))
             .attr("fill", "none")
             .attr("stroke", "blue";
+
+        g.append("svg:path")
+            .attr("d", line(this.data2))
+            .attr("fill", "none")
+            .attr("stroke", "red";
 
         g.selectAll(".xLabel")
             .data(x.ticks(5))
@@ -123,7 +141,6 @@ export class DataComponent implements OnInit {
             .attr("text-anchor", "right")
             .attr("dy", 4)
 
-
         g.selectAll(".xTicks")
             .data(x.ticks(5))
             .enter().append("svg:line")
@@ -141,5 +158,6 @@ export class DataComponent implements OnInit {
             .attr("x1", x(-0.3))
             .attr("y2", function(d) { return -1 * y(d); })
             .attr("x2", x(0))
+
     }
 }
