@@ -44,6 +44,7 @@ import { RouteParams} from 'angular2/router';
 export class DataComponent implements OnInit {
     datas;
     JSON;
+    graphData;
 
     setPayloadTimer(payload) {
         payload.new = true;
@@ -52,12 +53,50 @@ export class DataComponent implements OnInit {
         }, 5000);
     }
 
+    maxSamples = 10;
+
+    refreshGraphData(data) {
+        var paylog = data["paylog"];
+        var name = data["name"];
+
+        let update = false;
+        let freshFields = [];
+        if(Number(paylog)) {
+            update = true;
+            if(this.graphData[name] == undefined) {
+                this.graphData[name] = [];
+            }
+            console.log("new data");
+            this.graphData[name].push(paylog);
+            freshFields.push(name);
+        }
+
+        if(update) {
+            //this.addContinousGraphData(freshFields);
+            this.drawGraph();
+        }
+    }
+
+    addContinousGraphData(freshFields) {
+        for(let field in this.graphData) {
+            if(!freshFields.indexOf(field)) {
+                var stream = this.graphData[field];
+                stream.push(stream[stream.length-1]);
+                if(stream.length > this.maxSamples) {
+                    stream.shift();
+                }
+            }
+        }
+        console.log(this.graphData);
+    }
+
     constructor(private route: RouteParams, dataService: DataService) {
         this.JSON = JSON;
         dataService.getDatas(this.route.get('id'))
             .subscribe(
             datas => {
                 this.datas = [];
+                this.graphData = {};
                 for(var i = 0; i < datas.payload.length; i++) {
                     var payload = datas.payload[i].data;
                     this.setPayloadTimer(payload);
@@ -75,31 +114,23 @@ export class DataComponent implements OnInit {
                     var payload = datas.data;
                     this.setPayloadTimer(payload);
                     this.datas.unshift(payload);
+                    this.refreshGraphData(payload);
                 });
             }
         );
     }
 
-    data = [3, 6, 2, 7, 5, 2, 1, 3, 8, 9, 2, 5, 7];
-    data2 = [2, 10, 3, 6, 3, 8, 3, 4, 1, 9, 9, 2, 1];
     w = 400;
     h = 200;
+    margin = 20;
     vis = {};
 
-    ngOnInit() {
-        setInterval(() => this.drawGraph(), 1000);
-        setInterval(() => {
-            var id = Math.floor((Math.random() * this.data.length));
-            var num = Math.floor((Math.random() * 50);
-            this.data[id] = num;
-        }, 500);
-    }
-
     drawGraph() {
-        var margin = 20,
-        y = d3.scale.linear().domain([0, d3.max(this.data)]).range([0 + margin, this.h - margin]),
-        x = d3.scale.linear().domain([0, this.data.length]).range([0 + margin, this. w - margin])
+        console.log("draw start");
+        var y = d3.scale.linear().domain([0, 10]).range([0 + this.margin, this.h - this.margin]);
+        var x = d3.scale.linear().domain([0, this.maxSamples]).range([0 + this.margin, this. w - this.margin]);
 
+        console.log("donkey");
         d3.select("svg").selectAll("g").remove();
         var line = d3.svg.line()
             .x(function(d,i) { return x(i); })
@@ -113,14 +144,11 @@ export class DataComponent implements OnInit {
             .attr("transform", "translate(0, 200)");
 
         g.append("svg:path")
-            .attr("d", line(this.data))
+            .attr("d", line(this.graphData["Random number"]))
             .attr("fill", "none")
-            .attr("stroke", "blue";
-
-        g.append("svg:path")
-            .attr("d", line(this.data2))
-            .attr("fill", "none")
-            .attr("stroke", "red";
+            .attr("stroke", "blue")
+            .transition()
+            .attr("transform", "translate(" + x(-1) + ")");
 
         g.selectAll(".xLabel")
             .data(x.ticks(5))
@@ -158,6 +186,6 @@ export class DataComponent implements OnInit {
             .attr("x1", x(-0.3))
             .attr("y2", function(d) { return -1 * y(d); })
             .attr("x2", x(0))
-
+        console.log("draw end");
     }
 }
