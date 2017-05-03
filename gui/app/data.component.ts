@@ -131,10 +131,12 @@ export class DataComponent implements OnInit {
 
     w = 400;
     h = 200;
-    margin = 20;
     vis = {};
 
     drawGraph() {
+        const divBorders = d3.select("div").node().getBoundingClientRect();
+        this.margin = divBorders.x;
+        this.w = divBorders.width - 2 * this.margin;
         var y = d3.scale.linear().domain([0, 10]).range([0 + this.margin, this.h - this.margin]);
         var x = d3.scale.linear().domain([0, this.maxSamples]).range([0 + this.margin, this. w - this.margin]);
 
@@ -147,8 +149,8 @@ export class DataComponent implements OnInit {
             .attr("width", this.w)
             .attr("height", this.h);
 
-        var g = this.vis.append("svg:g")
-            .attr("transform", "translate(0, 200)");
+        var g = this.vis.append("g")
+            .attr("transform", "translate(" + divBorders.x + ", 200)");
 
         for(let topic in this.graphData) {
             const stream = this.graphData[topic];
@@ -156,8 +158,6 @@ export class DataComponent implements OnInit {
                 .attr("d", line(stream.data))
                 .attr("fill", "none")
                 .attr("stroke", stream.color)
-                .transition()
-                .attr("transform", "translate(" + x(-1) + ")");
         }
 
         g.selectAll(".xLabel")
