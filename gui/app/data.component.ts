@@ -69,7 +69,7 @@ export class DataComponent implements OnInit {
 
         let update = false;
         let freshFields = [];
-        if(Number(paylog)) {
+        if(!isNaN(paylog)) {
             update = true;
             if(this.graphData[name] == undefined) {
                 this.graphData[name] = {};
