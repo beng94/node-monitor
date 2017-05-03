@@ -7,7 +7,7 @@ import { RouteParams} from 'angular2/router';
     template: `
         <style>
             thead th {
-              background-color: #006DCC;
+              background-color: #337ab7;
               color: white;
             }
 
@@ -17,9 +17,29 @@ import { RouteParams} from 'angular2/router';
             }
         </style>
 
+        <div class="container col-lg-12">
+            <div class="row">
+                <div class="panel panel-primary nopadding">
+                    <div class="panel-heading">
+                        <h2>
+                            <span>Payload</span>
+                        </h2>
+                    </div>
+                </div>
+            </div>
 
-        <h2>Data tag</h2>
-		<svg></svg>
+            <div class="row">
+                <div class="panel panel-primary nopadding" id="graph">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Graph</h3>
+                    </div>
+                    <div class="panel-body">
+                        <svg></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="panel panel-primary nopadding">
                     <table class="table table-hover">
                         <thead>
@@ -37,6 +57,8 @@ import { RouteParams} from 'angular2/router';
                             </tr>
                         </tbody>
                     </table>
+               </div>
+           </div>
         </div>
         `,
     providers: [DataService]
@@ -126,11 +148,11 @@ export class DataComponent implements OnInit {
     vis = {};
 
     drawGraph() {
-        const divBorders = d3.select("div").node().getBoundingClientRect();
+        const divBorders = d3.select("#graph").node().getBoundingClientRect();
         this.margin = divBorders.x;
-        this.w = divBorders.width - 2 * this.margin;
+        this.w = divBorders.width - this.margin;
         var y = d3.scale.linear().domain([0, 10]).range([0 + this.margin, this.h - this.margin]);
-        var x = d3.scale.linear().domain([0, this.maxSamples]).range([0 + this.margin, this. w - this.margin]);
+        var x = d3.scale.linear().domain([0, this.maxSamples]).range([0 + this.margin, this. w - (this.margin + 10)]);
 
         d3.select("svg").selectAll("g").remove();
         var line = d3.svg.line()
