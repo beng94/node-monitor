@@ -56,7 +56,7 @@ export class DataComponent implements OnInit {
     maxSamples = 10;
 
     getRandomColor() {
-        const colors = ["red", "blue", "green", "yellow", "pink", "orange"];
+        const colors = ["red", "blue", "green", "yellow", "orange"];
         const id = Math.floor(Math.random() * colors.length);
         const color = colors[id];
         console.log(color);
@@ -134,6 +134,7 @@ export class DataComponent implements OnInit {
 
         d3.select("svg").selectAll("g").remove();
         var line = d3.svg.line()
+            .interpolate("basis")
             .x(function(d,i) { return x(i); })
             .y(function(d) { return -1 * y(d); })
 
@@ -150,6 +151,7 @@ export class DataComponent implements OnInit {
                 .attr("d", line(stream.data))
                 .attr("fill", "none")
                 .attr("stroke", stream.color)
+                .attr("stroke-width", "2");
         }
 
         g.selectAll(".xLabel")
