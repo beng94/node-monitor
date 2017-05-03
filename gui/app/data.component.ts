@@ -76,27 +76,19 @@ export class DataComponent implements OnInit {
                 this.graphData[name].data = [];
                 this.graphData[name].color = this.getRandomColor();
             }
-            this.graphData[name].data.push(paylog);
+
+            var dataSet = this.graphData[name].data;
+            dataSet.push(paylog);
+            if(dataSet.length > this.maxSamples + 1) {
+                dataSet.shift();
+            }
+
             freshFields.push(name);
         }
 
         if(update) {
-        //this.addContinousGraphData(freshFields);
             this.drawGraph();
         }
-    }
-
-    addContinousGraphData(freshFields) {
-        for(let field in this.graphData) {
-            if(!freshFields.indexOf(field)) {
-                var stream = this.graphData[field];
-                stream.data.push(stream[stream.length-1]);
-                if(stream.length > this.maxSamples) {
-                    stream.shift();
-                }
-            }
-        }
-        console.log(this.graphData);
     }
 
     constructor(private route: RouteParams, dataService: DataService) {
